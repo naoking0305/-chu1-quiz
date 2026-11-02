@@ -212,7 +212,7 @@ ri:[
 };
 
 const PLAYER_EMOJI=["🦊","🐼"];
-let S={player:0,names:["プレイヤー1","プレイヤー2"],mode:"all",list:[],idx:0,score:0,log:[],combo:0,hintUsed:false,answered:false,orderPick:[]};
+let S={player:0,names:["ふうちゃん","プレイヤー2"],mode:"all",list:[],idx:0,score:0,log:[],combo:0,hintUsed:false,answered:false,orderPick:[]};
 function store(k,v){try{if(v===undefined)return JSON.parse(localStorage.getItem(k));localStorage.setItem(k,JSON.stringify(v))}catch(e){return null}}
 (function(){const n=store("q2_names");if(n&&n.length===2)S.names=n;})();
 const $=s=>document.getElementById(s);
@@ -252,7 +252,7 @@ function home(){
   </div>`;
 }
 function pick(i,keep){S.player=i;if(!keep)home();else document.querySelectorAll(".pl").forEach((e,j)=>e.classList.toggle("sel",j===i))}
-function rename(i,v){S.names[i]=v.trim()||("プレイヤー"+(i+1));store("q2_names",S.names)}
+function rename(i,v){S.names[i]=v.trim()||(i===0?"ふうちゃん":"プレイヤー2");store("q2_names",S.names)}
 
 function start(mode){
   S.mode=mode;S.list=[];
