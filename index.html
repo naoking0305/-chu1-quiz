@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-<title>中1 2学期テスト対策クイズ</title>
+<title>中1 2学期テスト対策 ガチンコ100問</title>
 <style>
 :root{
   --bg:#fff8ef; --ink:#2b2b3a; --sub:#6b6b7b; --card:#ffffff; --line:#eadfce;
@@ -81,12 +81,15 @@ h1{font-size:22px;margin:6px 0 4px;text-align:center}
 .rev{font-size:14px;line-height:1.7;border-top:1px solid var(--line);padding:10px 0}
 .rev:first-child{border-top:none}
 .muted{color:var(--sub);font-size:12px}
+.modes{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-top:10px}
+.mode{border:none;border-radius:14px;padding:12px 6px;color:#fff;font-weight:800;font-size:15px;font-family:inherit;cursor:pointer}
+.mode small{display:block;font-weight:600;font-size:11px;opacity:.9}
+.quit{background:none;border:none;color:var(--sub);font-family:inherit;font-size:12px;text-decoration:underline;cursor:pointer;padding:0}
 </style>
 </head>
 <body>
 <div class="app" id="app"></div>
 <div class="combo" id="combo"></div>
-
 <script>
 const SUBJ = [
   {key:"koku", name:"国語", emoji:"📖", color:"var(--koku)"},
@@ -95,159 +98,217 @@ const SUBJ = [
   {key:"sha",  name:"社会", emoji:"🌏", color:"var(--sha)"},
   {key:"ri",   name:"理科", emoji:"🧪", color:"var(--ri)"},
 ];
-
-// type: "c" = 4択, "o" = 並べかえ
 const Q = {
 koku:[
- {lv:1,q:"「疎開」の読みはどれ？\n戦争中、子どもたちは田舎へ［疎開］した。",o:["そかい","そうかい","そけい","しょかい"],a:0,
-  h:"「疎」は「そ」と読むよ。",e:"疎開（そかい）＝空襲などをさけるため、都市から地方へ移ること。「大人になれなかった弟たちに……」に出てくる言葉。"},
- {lv:2,q:"「大人になれなかった弟たちに……」の作者は？",o:["米倉斉加年","安東みきえ","ヘルマン・ヘッセ","重松清"],a:0,
-  h:"俳優で絵本作家でもある人だよ。",e:"作者は米倉斉加年（よねくら まさかね）。安東みきえは「星の花が降るころに」、ヘッセは「少年の日の思い出」の作者。"},
- {lv:2,q:"次の文の「おはよう」は、文の成分では何？\nおはよう、今日はいい天気だね。",o:["独立語","主語","修飾語","接続語"],a:0,
-  h:"ほかの文節と直接つながらず、独立しているね。",e:"あいさつ・呼びかけ・応答・感動などは独立語。"},
- {lv:3,q:"次の文の主部はどれ？\n妹と弟が公園で遊ぶ。",o:["妹と弟が","弟が","妹と","公園で遊ぶ"],a:0,
-  h:"「だれが」遊ぶ？ 1人だけじゃないよ。",e:"「妹と」「弟が」は対等に並ぶ並立の関係。2つの文節がまとまった連文節「妹と弟が」が主部になる。"},
- {lv:3,q:"「本を読んでいる」の「読んで」と「いる」の関係は？",o:["補助の関係","並立の関係","修飾・被修飾の関係","主・述の関係"],a:0,
-  h:"「いる」は本来の意味（存在する）ではなく、意味をそえているだけ。",e:"「〜て（で）いる」「〜て（で）みる」などは補助の関係。文節は分かれるが、2つでひとまとまり。"},
+ {lv:1,q:"読みはどれ？\n戦争中、子どもたちは田舎へ［疎開］した。",o:["そかい","そうかい","そけい","しょかい"],a:0,h:"「疎」は「そ」と読むよ。",e:"疎開（そかい）＝空襲などをさけるため、都市から地方へ移ること。"},
+ {lv:1,q:"読みはどれ？\nこれは［貴重］な資料だ。",o:["きちょう","きじゅう","きぢょう","たかちょう"],a:0,h:"「重」は「ちょう」とも読むよ（例：慎重）。",e:"貴重（きちょう）＝とても大切なこと。"},
+ {lv:1,q:"カタカナを漢字にすると？\n意見の［コンキョ］を示す。",o:["根拠","根挙","恨拠","根処"],a:0,h:"「根」っこになる「よりどころ」。",e:"根拠＝考えや意見のよりどころ。「拠」は「よりどころ」の意味。"},
+ {lv:3,q:"カタカナを漢字にすると？\n混乱した事態を［シュウシュウ］する。",o:["収拾","収集","収縮","修習"],a:0,h:"「切手をシュウシュウする」とはちがう漢字だよ。",e:"収拾＝混乱をおさめること。収集＝物を集めること（切手の収集）。同音異義語に注意！"},
+ {lv:1,q:"「目を丸くする」の意味は？",o:["おどろく","よく見る","ねむくなる","おこる"],a:0,h:"びっくりしたときの表情。",e:"目を大きく見開くようすから「おどろく」という意味。"},
+ {lv:2,q:"「口がすべる」の意味は？",o:["うっかり言ってはいけないことを言う","話が上手である","食べすぎる","だまっている"],a:0,h:"言うつもりがなかったのに…",e:"「口がすべる」＝うっかり言ってはいけないことを言ってしまう。"},
+ {lv:2,q:"「肯定」の対義語は？",o:["否定","決定","安定","仮定"],a:0,h:"「そうだ」と認める ↔ 「そうではない」と打ち消す。",e:"肯定 ↔ 否定。"},
+ {lv:2,q:"「方法」の類義語は？",o:["手段","目的","結果","原因"],a:0,h:"「やり方」という意味に近いもの。",e:"方法≒手段。どちらも目的を果たすためのやり方。"},
+ {lv:3,q:"「豊富」と同じ組み立ての熟語は？",o:["岩石","前後","着席","新年"],a:0,h:"「豊」も「富」も「ゆたか」。似た意味の字の組み合わせ。",e:"豊富・岩石は似た意味の字の組み合わせ。前後＝反対の意味、着席＝席に着く（目的）、新年＝新しい年（修飾）。"},
+ {lv:1,q:"「太陽がほほえんでいる。」に使われている表現技法は？",o:["擬人法","直喩","倒置","体言止め"],a:0,h:"太陽は人間ではないのに…",e:"人でないものを人のように表すのが擬人法。"},
+ {lv:1,q:"「まるで宝石のような星」に使われている表現技法は？",o:["直喩（明喩）","隠喩（暗喩）","擬人法","反復"],a:0,h:"「まるで」「ような」がポイント。",e:"「まるで〜のような」を使ってたとえるのが直喩。使わずに「星は宝石だ」とたとえるのが隠喩。"},
+ {lv:2,q:"「行こう、未来へ。」に使われている表現技法は？",o:["倒置","体言止め","擬人法","対句"],a:0,h:"ふつうの順番に直すと「未来へ行こう。」",e:"語順を入れかえて強調するのが倒置。"},
+ {lv:2,q:"「夜空にかがやく満月。」に使われている表現技法は？",o:["体言止め","倒置","直喩","反復"],a:0,h:"文の最後の言葉に注目！",e:"文末を名詞（体言）で止めて余韻を残すのが体言止め。"},
+ {lv:1,q:"次の文はいくつの文節に分けられる？\n私は毎朝牛乳を飲む。",o:["4つ","3つ","5つ","6つ"],a:0,h:"「ネ」を入れてみよう。私はネ…",e:"私は／毎朝／牛乳を／飲む　の4文節。"},
+ {lv:2,q:"次の文の主語は？\nこの町にも、ついに春が来た。",o:["春が","町にも","ついに","来た"],a:0,h:"「何が」来たのかな？",e:"「何が─来た」→「春が」が主語。「町にも」は「が」ではないので主語ではない。"},
+ {lv:2,q:"次の文の述語は？\n弟はとても元気な小学生だ。",o:["小学生だ","元気な","とても","弟は"],a:0,h:"「弟は─どうだ・何だ」",e:"「弟は─小学生だ」で、述語は文の最後の「小学生だ」。"},
+ {lv:3,q:"「赤くて丸いりんご」の「赤くて」と「丸い」の関係は？",o:["並立の関係","補助の関係","修飾・被修飾の関係","主・述の関係"],a:0,h:"入れかえて「丸くて赤いりんご」にしても意味は同じ？",e:"対等に並び、入れかえても意味が変わらないのが並立の関係。"},
+ {lv:2,q:"次の文の「暑かったので」は、文の成分では何？\n暑かったので、窓を開けた。",o:["接続語","修飾語","独立語","主語"],a:0,h:"理由を表して、あとの部分につないでいるね。",e:"理由や条件を示してあとにつなぐのは接続語。"},
+ {lv:2,q:"「星の花が降るころに」の作者は？",o:["安東みきえ","米倉斉加年","ヘルマン・ヘッセ","工藤直子"],a:0,h:"「大人になれなかった弟たちに……」の作者ではないよ。",e:"「星の花が降るころに」は安東みきえ。「大人になれなかった弟たちに……」は米倉斉加年、「少年の日の思い出」はヘッセ。"},
+ {lv:3,q:"「大人になれなかった弟たちに……」の時代背景は？",o:["太平洋戦争中","明治時代","関東大震災のころ","高度経済成長期"],a:0,h:"疎開・配給・空襲が出てくるよ。",e:"太平洋戦争中、食べ物が不足する中での家族（弟ヒロユキ）の話。"},
 ],
 suu:[
- {lv:1,q:"方程式を解こう。\nx + 7 = 3",o:["x = −4","x = 4","x = 10","x = −10"],a:0,
-  h:"+7 を右辺に移項すると −7 になる。",e:"x ＝ 3 − 7 ＝ −4"},
- {lv:2,q:"方程式を解こう。\n3x − 5 = x + 9",o:["x = 7","x = 2","x = 14","x = −7"],a:0,
-  h:"x の項は左辺、数は右辺に集めよう。",e:"3x − x ＝ 9 + 5 → 2x ＝ 14 → x ＝ 7"},
- {lv:2,q:"方程式を解こう。\n2(x − 3) = 5x + 6",o:["x = −4","x = 4","x = −1","x = 0"],a:0,
-  h:"まずかっこをはずす：2x − 6 = 5x + 6",e:"2x − 5x ＝ 6 + 6 → −3x ＝ 12 → x ＝ −4"},
- {lv:3,q:"方程式を解こう。\nx/3 − 1 = x/4",o:["x = 12","x = −12","x = 1","x = 7"],a:0,
-  h:"両辺に3と4の最小公倍数 12 をかけて分母をはらおう。",e:"×12 → 4x − 12 ＝ 3x → x ＝ 12。「−1」にも12をかけるのを忘れないで！"},
- {lv:3,q:"子どもにあめを配る。1人3個ずつだと5個余り、1人4個ずつだと2個足りない。子どもは何人？",o:["7人","5人","3人","9人"],a:0,
-  h:"子どもを x 人として「あめの数」を2通りの式で表そう。",e:"3x＋5 ＝ 4x−2 → x ＝ 7（人）。あめは26個。"},
+ {lv:1,q:"計算しよう。\n−5 + 8",o:["3","−3","13","−13"],a:0,h:"絶対値の大きい方の符号になるよ。",e:"8 − 5 ＝ 3、符号は＋。"},
+ {lv:1,q:"計算しよう。\n(−7) − (−3)",o:["−4","−10","4","10"],a:0,h:"−(−3) は ＋3",e:"−7 ＋ 3 ＝ −4"},
+ {lv:2,q:"計算しよう。\n(−2) × (−3) × (−4)",o:["−24","24","−9","9"],a:0,h:"負の数が3個（奇数個）だと符号は？",e:"負の数が奇数個なので答えは −。2×3×4＝24 → −24"},
+ {lv:2,q:"計算しよう。\n−2² + (−3)²",o:["5","13","−13","−5"],a:0,h:"−2²＝−4、(−3)²＝9",e:"−4 ＋ 9 ＝ 5"},
+ {lv:3,q:"計算しよう。\n(−3)² − 2 × (−5) ÷ (−10)",o:["8","10","−8","1"],a:0,h:"かけ算・わり算を先に！ 2×(−5)÷(−10) はいくつ？",e:"9 − {2×(−5)÷(−10)} ＝ 9 − 1 ＝ 8"},
+ {lv:2,q:"90を素因数分解すると？",o:["2 × 3² × 5","2 × 45","9 × 10","2 × 3 × 15"],a:0,h:"素数（2, 3, 5…）だけの積にするよ。",e:"90 ＝ 2 × 3 × 3 × 5 ＝ 2 × 3² × 5。45や15は素数ではない。"},
+ {lv:1,q:"次の式を×を使わずに表すと？\na × a × b",o:["a²b","2ab","aab","a + a + b"],a:0,h:"同じ文字のかけ算は指数を使う。",e:"a × a ＝ a²、それに b をかけて a²b。"},
+ {lv:2,q:"次の式を×や÷を使わずに表すと？\na × (−1) ÷ b",o:["−a/b","−1a/b","a/−b","−ab"],a:0,h:"「1」は書かないのがルール。",e:"a×(−1)＝−a。それを b でわって −a/b。−1a とは書かない。"},
+ {lv:1,q:"50円切手 x 枚と、80円切手 y 枚の代金の合計は？",o:["50x + 80y 円","130xy 円","50y + 80x 円","4000xy 円"],a:0,h:"それぞれの代金をたそう。",e:"50×x ＋ 80×y ＝ 50x ＋ 80y（円）"},
+ {lv:2,q:"a = −3 のとき、a² + 2a の値は？",o:["3","15","−15","−3"],a:0,h:"(−3)² ＋ 2×(−3)",e:"9 ＋ (−6) ＝ 3"},
+ {lv:2,q:"計算しよう。\n4x − 3 − (2x − 5)",o:["2x + 2","2x − 8","6x − 8","2x − 2"],a:0,h:"−( ) をはずすと符号が変わる：−2x ＋ 5",e:"4x − 3 − 2x ＋ 5 ＝ 2x ＋ 2"},
+ {lv:3,q:"計算しよう。\n3(2a − 1) − 2(a − 4)",o:["4a + 5","4a − 11","4a − 5","8a + 5"],a:0,h:"−2(a − 4) ＝ −2a ＋ 8",e:"6a − 3 − 2a ＋ 8 ＝ 4a ＋ 5"},
+ {lv:3,q:"「1個 a 円のケーキ5個の代金は、1000円より高い」を式で表すと？",o:["5a > 1000","5a < 1000","5a ≧ 1000","a + 5 > 1000"],a:0,h:"「より高い」は「＞」。1000円ちょうどはふくまない。",e:"代金 5a が 1000 より大きいので 5a ＞ 1000。「以上」なら ≧ を使う。"},
+ {lv:1,q:"方程式を解こう。\n4x = −20",o:["x = −5","x = 5","x = −16","x = −80"],a:0,h:"両辺を4でわろう。",e:"x ＝ −20 ÷ 4 ＝ −5"},
+ {lv:2,q:"1冊120円のノートを何冊かと、200円の筆箱を1つ買ったら、代金は920円だった。ノートは何冊？",o:["6冊","5冊","7冊","8冊"],a:0,h:"ノートを x 冊として、120x ＋ 200 ＝ 920",e:"120x ＝ 720 → x ＝ 6（冊）"},
+ {lv:2,q:"方程式を解こう。\n5x + 3 = 2x − 9",o:["x = −4","x = 4","x = −2","x = 2"],a:0,h:"x は左辺、数は右辺へ移項。",e:"5x − 2x ＝ −9 − 3 → 3x ＝ −12 → x ＝ −4"},
+ {lv:2,q:"方程式を解こう。\n3(x + 2) = x − 4",o:["x = −5","x = 5","x = −1","x = −3"],a:0,h:"かっこをはずすと 3x ＋ 6 ＝ x − 4",e:"3x − x ＝ −4 − 6 → 2x ＝ −10 → x ＝ −5"},
+ {lv:3,q:"方程式を解こう。\n0.3x − 1.2 = 0.1x + 0.4",o:["x = 8","x = 0.8","x = 4","x = −8"],a:0,h:"両辺を10倍して小数をなくそう。",e:"3x − 12 ＝ x ＋ 4 → 2x ＝ 16 → x ＝ 8"},
+ {lv:3,q:"方程式を解こう。\n(x − 1)/2 = (x + 3)/4",o:["x = 5","x = 1","x = −5","x = 7"],a:0,h:"両辺に4をかけると 2(x − 1) ＝ x ＋ 3",e:"2x − 2 ＝ x ＋ 3 → x ＝ 5"},
+ {lv:3,q:"x = 2 が、方程式 ax + 4 = 10 の解であるとき、a の値は？",o:["3","6","7","−3"],a:0,h:"x に 2 を代入して、a の方程式にしよう。",e:"2a ＋ 4 ＝ 10 → 2a ＝ 6 → a ＝ 3"},
 ],
 ei:[
- {lv:1,q:"（　）に入る語は？\nThis is Mr. Sato. (  ) is our English teacher.",o:["He","She","It","They"],a:0,
-  h:"Mr. は男の人につけるよ。",e:"男性（Mr. Sato）を受けるのは He。女性なら She。"},
- {lv:1,q:"（　）に入る語は？\nWhat (  ) do you like? — I like blue.",o:["color","is","are","do"],a:0,
-  h:"答えは「青が好き」。",e:"What color ～? ＝「何色を～？」。What sport, What food なども同じ形。"},
- {lv:2,q:"（　）に入る語は？\nDon't (  ) in the classroom.",o:["run","runs","running","to run"],a:0,
-  h:"命令文は動詞の「元の形」を使うよ。",e:"「～してはいけません」は Don't＋動詞の原形。Don't run in the classroom."},
- {lv:3,q:"（　）に入る語は？\nDo you know Ms. Brown? — Yes, I know (  ).",o:["her","she","his","he"],a:0,
-  h:"know の「あとに」置くときの形は？",e:"動詞のあと（目的語）は her。she＝「彼女は」、her＝「彼女を／彼女の」。"},
- {lv:2,type:"o",q:"日本語に合うように並べかえよう。\n「あの背の高い男の子はだれですか。」",
-  t:["Who","is","that","tall","boy?"],
-  h:"Who が先頭。「あの背の高い男の子」は that tall boy。",e:"Who is that tall boy? — He is Kenta. のように答える。"},
+ {lv:1,q:"（　）に入る語は？\nI (  ) from Yokohama.",o:["am","is","are","do"],a:0,h:"主語は I。",e:"I am from ～.＝「私は～出身です」。"},
+ {lv:1,q:"（　）に入る語は？\nYou (  ) a good singer.",o:["are","am","is","be"],a:0,h:"主語は You。",e:"You のときの be動詞は are。"},
+ {lv:1,q:"（　）に入る語は？\n(  ) you a student? — Yes, I am.",o:["Are","Do","Is","Am"],a:0,h:"答えが \"I am\" になっているね。",e:"be動詞の疑問文は be動詞を前に出す。Are you ～? — Yes, I am."},
+ {lv:2,q:"「私は納豆が好きではありません」\nI (  ) like natto.",o:["don't","am not","not","isn't"],a:0,h:"like は一般動詞。",e:"一般動詞の否定文は don't＋動詞。am not は使わない。"},
+ {lv:1,q:"（　）に入る語は？\n(  ) you play the piano? — Yes, I do.",o:["Do","Are","Can","Is"],a:0,h:"答えに do があるよ。",e:"一般動詞の疑問文は Do で始める。"},
+ {lv:2,q:"（　）に入る語は？\nCan you ski? — No, I (  ).",o:["can't","don't","am not","can"],a:0,h:"Can で聞かれて「いいえ」。",e:"Can ～? には can / can't で答える。No, I can't."},
+ {lv:2,q:"（　）に入る語は？\nI can (  ) English well.",o:["speak","speaks","speaking","to speak"],a:0,h:"can のあとの動詞の形は？",e:"can のあとは動詞の原形。"},
+ {lv:1,q:"（　）に入る語は？\nThis is Ms. Kato. (  ) is a music teacher.",o:["She","He","It","They"],a:0,h:"Ms. は女性につけるよ。",e:"女性を受けるのは She。"},
+ {lv:2,q:"（　）に入る語は？\nWhere is my bag? — (  ) is under the desk.",o:["It","He","This","That"],a:0,h:"「それは」机の下にあるよ。",e:"物を受けるのは It。"},
+ {lv:2,q:"（　）に入る語は？\n(  ) do you live? — I live in Aoba Ward.",o:["Where","What","When","Who"],a:0,h:"答えは「青葉区に住んでいる」。",e:"場所をたずねるのは Where。"},
+ {lv:2,q:"（　）に入る語は？\nHow many (  ) do you have? — I have two.",o:["dogs","dog","a dog","the dog"],a:0,h:"How many のあとは…",e:"How many のあとは名詞の複数形。"},
+ {lv:3,q:"（　）に入る語は？\nI like Ken. I play soccer with (  ) every day.",o:["him","he","his","her"],a:0,h:"with のあとに置く形は？",e:"前置詞（with など）のあとは目的格。he → him。"},
+ {lv:3,q:"（　）に入る語は？\nThat is (  ) old house.",o:["an","a","×（何も入らない）","the a"],a:0,h:"old の最初の音は「オ」。",e:"母音で始まる語（old）の前は an。house ではなく old の音で決まるのがポイント！"},
+ {lv:2,q:"（　）に入る語は？\nWhat (  ) is it? — It's ten.",o:["time","day","color","sport"],a:0,h:"答えは「10時です」。",e:"What time is it?＝「何時ですか？」"},
+ {lv:3,q:"「図書館では静かにしなさい」\n(  ) quiet in the library.",o:["Be","Are","Is","Do"],a:0,h:"命令文は動詞の原形で始める。be動詞の原形は？",e:"be動詞の命令文は Be で始める。Be quiet."},
+ {lv:2,q:"「トムは料理ができません」\nTom (  ) cook.",o:["can't","don't","isn't","not can"],a:0,h:"「〜できない」は？",e:"can の否定は can't（cannot）。主語が Tom でも can は形が変わらない。"},
+ {lv:3,q:"（　）に入る語は？\nThere are many (  ) in the park.\n（公園にたくさんの子どもがいる）",o:["children","childs","childes","child"],a:0,h:"child の複数形は特別な形！",e:"child → children（不規則変化）。man → men も同じなかま。"},
+ {lv:2,type:"o",q:"並べかえよう。\n「あなたは何のスポーツが好きですか。」",t:["What","sport","do","you","like?"],h:"What sport でひとまとまり。",e:"What sport do you like? — I like tennis."},
+ {lv:3,type:"o",q:"並べかえよう。\n「私はギターを上手にひけません。」",t:["I","can't","play","the","guitar","well."],h:"I can't ＋動詞の原形…。well は最後。",e:"I can't play the guitar well. 楽器には the をつける。"},
+ {lv:3,type:"o",q:"並べかえよう。\n「あなたはどこでテニスをしますか。」",t:["Where","do","you","play","tennis?"],h:"Where が先頭。そのあとは疑問文の形。",e:"Where do you play tennis? — I play it in the park."},
 ],
 sha:[
- {lv:1,q:"一年中気温が高く、雨が多い気候帯は？",o:["熱帯","乾燥帯","温帯","冷帯（亜寒帯）"],a:0,
-  h:"赤道の近くに広がっているよ。",e:"熱帯は赤道付近。熱帯雨林が広がる。"},
- {lv:1,q:"645年、中大兄皇子と中臣鎌足が蘇我氏をたおして始めた政治改革は？",o:["大化の改新","壬申の乱","冠位十二階","大宝律令"],a:0,
-  h:"日本初の元号（年号）がついた改革。",e:"大化の改新。土地と人民を国のものとする公地・公民の方針を示した。"},
- {lv:2,q:"聖徳太子が、家がらにとらわれず才能や功績のある人を役人に取り立てるために定めた制度は？",o:["冠位十二階","十七条の憲法","班田収授法","遣隋使"],a:0,
-  h:"冠の色で位を区別したよ。",e:"冠位十二階（603年）。十七条の憲法は役人の心構えを示したもの。"},
- {lv:2,q:"中国が、外国の企業を受け入れるために沿岸部に設けた地域を何という？",o:["経済特区","工業団地","シリコンバレー","ハブ空港"],a:0,
-  h:"「経済」の「特別な地区」。シェンチェンなどが有名。",e:"経済特区。税金を安くするなどして外国企業を招き、工業が発展した。"},
- {lv:3,q:"東南アジアの国々が、経済・政治などで協力するためにつくった組織は？",o:["ASEAN","EU","APEC","NATO"],a:0,
-  h:"東南アジア諸国連合のアルファベット略称。",e:"ASEAN（東南アジア諸国連合）。EUはヨーロッパ連合、APECはアジア太平洋経済協力、NATOは北大西洋条約機構。"},
+ {lv:1,q:"六大陸のうち、いちばん大きい大陸は？",o:["ユーラシア大陸","アフリカ大陸","北アメリカ大陸","南アメリカ大陸"],a:0,h:"日本の西にある大きな大陸。",e:"ユーラシア大陸が最大。"},
+ {lv:1,q:"三大洋のうち、いちばん大きい海洋は？",o:["太平洋","大西洋","インド洋","北極海"],a:0,h:"日本の東側に広がる海。",e:"太平洋 ＞ 大西洋 ＞ インド洋。"},
+ {lv:2,q:"緯度0度の線を何という？",o:["赤道","本初子午線","日付変更線","北回帰線"],a:0,h:"地球をちょうど南北に分ける線。",e:"緯度0度＝赤道。経度0度＝本初子午線。"},
+ {lv:2,q:"経度0度の本初子午線が通る都市は？",o:["ロンドン","パリ","ローマ","ニューヨーク"],a:0,h:"旧グリニッジ天文台がある。",e:"イギリスのロンドン。"},
+ {lv:3,q:"東京（東経135度）とニューヨーク（西経75度）の時差は？",o:["14時間","4時間","9時間","15時間"],a:0,h:"東経と西経をまたぐときは、経度の差をたし算！",e:"経度差 135＋75＝210度。210÷15＝14時間。"},
+ {lv:2,q:"日本の最南端の島は？",o:["沖ノ鳥島","南鳥島","与那国島","択捉島"],a:0,h:"波でけずられないよう護岸工事をしている島。",e:"最南端＝沖ノ鳥島、最東端＝南鳥島、最西端＝与那国島、最北端＝択捉島。"},
+ {lv:2,q:"排他的経済水域は、沿岸から何海里までの範囲？（領海を除く）",o:["200海里","12海里","100海里","24海里"],a:0,h:"領海は12海里。それよりずっと広い。",e:"排他的経済水域は200海里まで。水産資源や鉱産資源を沿岸国が利用できる。"},
+ {lv:2,q:"乾燥帯の地域でよく見られる住居は？",o:["日干しれんがの家","高床の家","木造の家","雪のブロックの家"],a:0,h:"木が少なく、土はたくさんある地域。",e:"乾燥帯では土をかためて干した日干しれんがの家が多い。"},
+ {lv:2,q:"冷帯（亜寒帯）に広がる針葉樹の森林を何という？",o:["タイガ","サバナ","ツンドラ","ステップ"],a:0,h:"ロシアのシベリアなどに広がる。",e:"タイガ＝針葉樹林。サバナ＝熱帯の草原、ステップ＝乾燥帯の草原、ツンドラ＝寒帯のこけなどの地域。"},
+ {lv:1,q:"1日5回、聖地メッカの方向に祈る宗教は？",o:["イスラム教","キリスト教","仏教","ヒンドゥー教"],a:0,h:"豚肉を食べない、ラマダン（断食）がある。",e:"イスラム教。聖典はコーラン。"},
+ {lv:2,q:"中国が外国企業を受け入れるために沿岸部に設けた地域は？",o:["経済特区","工業団地","シリコンバレー","ニュータウン"],a:0,h:"シェンチェン（深圳）などが有名。",e:"経済特区。外国の資金と技術を取り入れて工業が発展した。"},
+ {lv:3,q:"東南アジアで、植民地時代に開かれた、輸出向けの作物を大規模に栽培する農園を何という？",o:["プランテーション","オアシス","二期作","焼畑農業"],a:0,h:"天然ゴム・油やし・バナナなどを育てる大農園。",e:"プランテーション。マレーシアの油やし、フィリピンのバナナなど。"},
+ {lv:2,q:"東南アジアの国々が協力するためにつくった組織は？",o:["ASEAN","EU","APEC","OPEC"],a:0,h:"東南アジア諸国連合。",e:"ASEAN（東南アジア諸国連合）。EU＝ヨーロッパ連合。"},
+ {lv:1,q:"縄文時代に、豊かなめぐみを祈るなどのために作られた土の人形は？",o:["土偶","埴輪","銅鐸","須恵器"],a:0,h:"「土」の人形と書くよ。",e:"土偶は縄文時代。埴輪は古墳時代、銅鐸は弥生時代。"},
+ {lv:1,q:"弥生時代の高床倉庫は、何を保存するためのもの？",o:["米（稲）","武器","土器","塩"],a:0,h:"弥生時代に広まった農業は？",e:"稲作が広まり、収穫した米をねずみや湿気から守るため高床倉庫を作った。"},
+ {lv:2,q:"3世紀、30ほどの国をまとめた卑弥呼の国は？",o:["邪馬台国","奴国","大和政権","百済"],a:0,h:"「魏志倭人伝」に記されている。",e:"邪馬台国。卑弥呼は魏に使いを送った。"},
+ {lv:2,q:"日本最大の古墳・大仙古墳（仁徳天皇陵）がある都道府県と、その形は？",o:["大阪府・前方後円墳","奈良県・円墳","大阪府・方墳","奈良県・前方後円墳"],a:0,h:"堺市にあるよ。",e:"大阪府堺市の大仙古墳は前方後円墳。世界遺産「百舌鳥・古市古墳群」の一つ。"},
+ {lv:2,q:"朝鮮半島などから日本に移り住んだ渡来人が伝えたものは？",o:["須恵器をつくる技術","鉄砲","茶の湯","かな文字"],a:0,h:"かたくて灰色の土器だよ。",e:"渡来人は須恵器・漢字・仏教・儒学などを伝えた。鉄砲は戦国時代、かな文字は平安時代。"},
+ {lv:2,q:"聖徳太子が、家がらにとらわれず有能な人を役人に取り立てるために定めた制度は？",o:["冠位十二階","十七条の憲法","班田収授法","大宝律令"],a:0,h:"冠の色で位を区別した。",e:"冠位十二階（603年）。十七条の憲法は役人の心構え（604年）。"},
+ {lv:3,q:"645年、蘇我氏をたおして大化の改新を始めた中心人物は？",o:["中大兄皇子と中臣鎌足","聖徳太子と蘇我馬子","天武天皇と持統天皇","聖武天皇と行基"],a:0,h:"のちの天智天皇と、藤原氏の祖先。",e:"中大兄皇子（のちの天智天皇）と中臣鎌足（のちの藤原鎌足）。"},
 ],
 ri:[
- {lv:1,q:"次のうち、有機物はどれ？",o:["砂糖","食塩","鉄","ガラス"],a:0,
-  h:"燃やすと黒くこげて、二酸化炭素が出るもの。",e:"砂糖は炭素をふくむ有機物。食塩・鉄・ガラスは無機物。"},
- {lv:1,q:"水素の性質として正しいものは？",o:["火を近づけると音を立てて燃える","石灰水を白くにごらせる","ものを燃やすはたらきがある","刺激臭がある"],a:0,
-  h:"マッチの火を近づけると「ポン！」",e:"水素は空気中で音を立てて燃え、水ができる。物質の中でいちばん軽い気体。"},
- {lv:2,q:"金属に共通する性質「ではない」ものは？",o:["磁石につく","電気をよく通す","みがくと光る","たたくと広がる"],a:0,
-  h:"アルミ缶や10円玉（銅）は磁石につく？",e:"磁石につくのは鉄など一部の金属だけ。電気を通す・金属光沢・展性（広がる）・延性（のびる）・熱を伝えやすいのが共通の性質。"},
- {lv:2,q:"ろ過のしかたとして正しいものは？",o:["ろうとのあしの長いほうをビーカーのかべにつける","ろうとのあしをビーカーの中央に入れる","液を直接ろ紙にいきおいよく注ぐ","ろ紙をぬらさずに使う"],a:0,
-  h:"液がはねないようにするには？",e:"ろうとのあしのとがった（長い）ほうをビーカーのかべにつけ、液はガラス棒を伝わらせて注ぐ。"},
- {lv:3,q:"60℃の水100gに、硝酸カリウムと塩化ナトリウムをそれぞれとけるだけとかし、20℃まで冷やした。結晶が多く出てくるのは？",o:["硝酸カリウム","塩化ナトリウム","どちらも同じ量","どちらも結晶は出ない"],a:0,
-  h:"温度によって、とける量（溶解度）が大きく変わる物質はどれ？",e:"硝酸カリウムは温度が下がると溶解度が大きく下がるので、冷やすと結晶がたくさん出る（再結晶）。塩化ナトリウムは温度で溶解度があまり変わらない。"},
+ {lv:2,q:"ルーペで、手に持った花を観察するときの正しい使い方は？",o:["ルーペを目に近づけ、花を前後に動かす","ルーペを花に近づけ、顔を動かす","ルーペを目からはなし、花を動かす","ルーペで太陽を見てから観察する"],a:0,h:"ルーペはずっと目の近くに。",e:"ルーペは目に近づけて持ち、観察するものを前後に動かしてピントを合わせる。太陽は絶対に見てはいけない！"},
+ {lv:1,q:"おしべの先にあって、花粉をつくる部分は？",o:["やく","柱頭","子房","胚珠"],a:0,h:"ひらがな2文字。",e:"やくで花粉がつくられる。柱頭はめしべの先。"},
+ {lv:2,q:"被子植物と裸子植物を分けるちがいは？",o:["胚珠が子房に包まれているかどうか","花がさくかどうか","種子をつくるかどうか","葉脈が網目状かどうか"],a:0,h:"裸子植物の「裸」は何がむき出し？",e:"被子植物は胚珠が子房に包まれ、裸子植物は胚珠がむき出し。どちらも種子でふえる。"},
+ {lv:1,q:"単子葉類の根のつくりは？",o:["ひげ根","主根と側根","根がない","根毛だけ"],a:0,h:"トウモロコシやイネの根を思い出そう。",e:"単子葉類＝ひげ根、双子葉類＝主根と側根。"},
+ {lv:2,q:"子はえらと皮膚で呼吸し、親は肺と皮膚で呼吸する動物のなかまは？",o:["両生類","魚類","ハチュウ類","哺乳類"],a:0,h:"カエルのおたまじゃくしを思い出そう。",e:"両生類（カエル・イモリなど）。"},
+ {lv:3,q:"イカやアサリのように、内臓が外とう膜で包まれている動物のなかまは？",o:["軟体動物","節足動物","両生類","魚類"],a:0,h:"からだがやわらかく、背骨も節もない。",e:"軟体動物。カニやバッタは外骨格と節をもつ節足動物。"},
+ {lv:1,q:"次のうち、有機物はどれ？",o:["砂糖","食塩","鉄","ガラス"],a:0,h:"燃やすとこげて二酸化炭素が出る。",e:"砂糖・デンプン・プラスチックなどは炭素をふくむ有機物。"},
+ {lv:1,q:"有機物を燃やすと発生する気体は？",o:["二酸化炭素","酸素","水素","窒素"],a:0,h:"有機物には炭素がふくまれているよ。",e:"有機物は燃えると二酸化炭素（と水）ができる。"},
+ {lv:2,q:"金属に共通する性質「ではない」ものは？",o:["磁石につく","電気をよく通す","みがくと光る","たたくと広がる"],a:0,h:"アルミや銅は磁石につく？",e:"磁石につくのは鉄など一部の金属だけ。"},
+ {lv:2,q:"ガスバーナーの炎がオレンジ色でゆらゆらしているとき、どうする？",o:["空気調節ねじを開いて空気を増やす","ガス調節ねじを開いてガスを増やす","元栓をしめる","空気調節ねじをしめる"],a:0,h:"オレンジ色の炎は、何が足りない？",e:"空気（酸素）が不足している。空気調節ねじを開いて、青い炎にする。"},
+ {lv:3,q:"質量78.6g、体積10cm³の物質の密度は？",o:["7.86 g/cm³","0.127 g/cm³","786 g/cm³","88.6 g/cm³"],a:0,h:"密度 ＝ 質量 ÷ 体積",e:"78.6 ÷ 10 ＝ 7.86 g/cm³（鉄の密度）。"},
+ {lv:2,q:"水（密度1.00 g/cm³）に入れたとき、浮く物質は？",o:["ポリエチレン（0.95）","アルミニウム（2.70）","鉄（7.87）","銅（8.96）"],a:0,h:"密度が水より小さいものは浮く。",e:"水より密度が小さいポリエチレンは浮く。（ ）内は密度（g/cm³）。"},
+ {lv:1,q:"二酸化マンガンにオキシドール（うすい過酸化水素水）を加えると発生する気体は？",o:["酸素","二酸化炭素","水素","アンモニア"],a:0,h:"線香の火を激しく燃やす気体。",e:"酸素が発生する。二酸化マンガン自体は変化しない。"},
+ {lv:2,q:"石灰石にうすい塩酸を加えると発生する気体は？",o:["二酸化炭素","酸素","水素","アンモニア"],a:0,h:"石灰水を白くにごらせる気体。",e:"二酸化炭素が発生する。"},
+ {lv:2,q:"アンモニアの集め方は？",o:["上方置換法","水上置換法","下方置換法","どれでもよい"],a:0,h:"水にとてもとけやすく、空気より軽い。",e:"水にとけやすく空気より軽いので上方置換法。"},
+ {lv:3,q:"水上置換法で、はじめに出てくる気体を集めずに捨てるのはなぜ？",o:["装置の中の空気が多くふくまれているから","気体が熱すぎるから","水がまざっているから","気体が重いから"],a:0,h:"試験管やガラス管の中には、はじめ何が入っていた？",e:"はじめの気体には装置内の空気がまざるので、純粋な気体を集めるため捨てる。"},
+ {lv:3,q:"水100gに砂糖25gをとかした砂糖水の質量パーセント濃度は？",o:["20%","25%","12.5%","80%"],a:0,h:"わる数は水溶液全体の質量！",e:"25 ÷ (100＋25) × 100 ＝ 20%"},
+ {lv:2,q:"ろ過のしかたとして正しいものは？",o:["ろうとのあしの長いほうをビーカーのかべにつける","ろうとのあしをビーカーの中央に入れる","液をいきおいよく直接注ぐ","ろ紙をぬらさずに使う"],a:0,h:"液がはねないようにするには？",e:"あしの長いほうをかべにつけ、液はガラス棒を伝わらせて注ぐ。"},
+ {lv:3,q:"60℃の水100gに硝酸カリウムと塩化ナトリウムをそれぞれとけるだけとかし、20℃まで冷やした。結晶が多く出るのは？",o:["硝酸カリウム","塩化ナトリウム","どちらも同じ量","どちらも出ない"],a:0,h:"温度で溶解度が大きく変わるのはどっち？",e:"硝酸カリウムは温度が下がると溶解度が大きく下がるので結晶が多く出る（再結晶）。塩化ナトリウムはほとんど変わらない。"},
+ {lv:2,q:"砂糖水をしばらく置いておくと、濃さはどうなる？",o:["どこも同じ濃さのまま","下の方が濃くなる","上の方が濃くなる","砂糖が出てくる"],a:0,h:"水溶液の性質を思い出そう。",e:"水溶液は透明で、濃さはどこも均一。時間がたっても変わらない。"},
 ],
 };
 
-const PLAYER_EMOJI = ["🦊","🐼"];
-let S = {player:0,names:["プレイヤー1","プレイヤー2"],list:[],idx:0,score:0,log:[],combo:0,hintUsed:false,answered:false,orderPick:[]};
-
+const PLAYER_EMOJI=["🦊","🐼"];
+let S={player:0,names:["プレイヤー1","プレイヤー2"],mode:"all",list:[],idx:0,score:0,log:[],combo:0,hintUsed:false,answered:false,orderPick:[]};
 function store(k,v){try{if(v===undefined)return JSON.parse(localStorage.getItem(k));localStorage.setItem(k,JSON.stringify(v))}catch(e){return null}}
-(function(){const n=store("q1_names");if(n&&n.length===2)S.names=n;})();
-
+(function(){const n=store("q2_names");if(n&&n.length===2)S.names=n;})();
 const $=s=>document.getElementById(s);
 const esc=s=>String(s).replace(/[&<>"]/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]));
 const shuffle=a=>{a=a.slice();for(let i=a.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[a[i],a[j]]=[a[j],a[i]]}return a};
 const stars=n=>"★".repeat(n)+"☆".repeat(3-n);
+const fmt=v=>Number.isInteger(v)?String(v):v.toFixed(1);
+const modeName=m=>m==="all"?"5教科100問":SUBJ.find(s=>s.key===m).name+"20問";
+const bestKey=(p,m)=>"q2_best_"+p+"_"+m;
 
 function home(){
-  const best=[0,1].map(i=>{const b=store("q1_best_"+i);return b==null?"まだ記録なし":"ベスト "+b+"点"});
+  const b=bestKey(S.player,"all"),bv=store(b);
   $("app").innerHTML=`
-  <h1>🏆 中1<br>2学期テスト対策クイズ</h1>
-  <p class="lead">11月2日までの授業範囲から全25問・100点満点<br>（横浜市の教科書に対応）</p>
+  <h1>🔥 中1 2学期テスト対策<br>ガチンコ100問</h1>
+  <p class="lead">11月2日までの授業範囲・5教科×20問<br>（横浜市の教科書に対応）</p>
   <div class="card">
     <div style="font-weight:800;margin-bottom:8px">だれがやる？（名前はタップで変えられるよ）</div>
     <div class="players">
-      ${[0,1].map(i=>`<div class="pl ${S.player===i?"sel":""}" onclick="pick(${i})">
+      ${[0,1].map(i=>{const v=store(bestKey(i,"all"));return `<div class="pl ${S.player===i?"sel":""}" onclick="pick(${i})">
         <div class="em">${PLAYER_EMOJI[i]}</div>
         <input value="${esc(S.names[i])}" maxlength="8" onclick="event.stopPropagation();pick(${i},true)" oninput="rename(${i},this.value)">
-        <div class="best">${best[i]}</div></div>`).join("")}
+        <div class="best">${v==null?"100問：記録なし":"100問ベスト "+fmt(v)+"点"}</div></div>`}).join("")}
     </div>
   </div>
   <div class="card">
-    <div class="subjects">${SUBJ.map(s=>`<div class="sj" style="background:${s.color}">${s.emoji}<br>${s.name}</div>`).join("")}</div>
+    <button class="btn" style="background:linear-gradient(90deg,var(--koku),var(--ri));margin-top:0" onclick="start('all')">🏆 5教科100問に挑戦（100点満点）</button>
+    <div style="font-weight:800;margin:14px 0 0;font-size:14px">教科ごとに練習（各20問・20点満点）</div>
+    <div class="modes">
+      ${SUBJ.map(s=>{const v=store(bestKey(S.player,s.key));return `<button class="mode" style="background:${s.color}" onclick="start('${s.key}')">${s.emoji} ${s.name}<small>${v==null?"記録なし":"ベスト "+fmt(v)+"点"}</small></button>`}).join("")}
+    </div>
     <ul class="rule">
-      <li>1問4点 × 25問 ＝ 100点</li>
-      <li>難しさは ★☆☆〜★★★ で表示</li>
-      <li>💡ヒントを見て正解すると 2点</li>
+      <li>1問1点。100問で100点満点</li>
+      <li>難しさは ★☆☆〜★★★</li>
+      <li>💡ヒントを見て正解すると 0.5点</li>
       <li>連続正解でコンボ！</li>
     </ul>
-    <button class="btn" style="background:linear-gradient(90deg,var(--koku),var(--ri))" onclick="start()">スタート！</button>
   </div>`;
 }
 function pick(i,keep){S.player=i;if(!keep)home();else document.querySelectorAll(".pl").forEach((e,j)=>e.classList.toggle("sel",j===i))}
-function rename(i,v){S.names[i]=v.trim()||("プレイヤー"+(i+1));store("q1_names",S.names)}
+function rename(i,v){S.names[i]=v.trim()||("プレイヤー"+(i+1));store("q2_names",S.names)}
 
-function start(){
-  S.list=[];SUBJ.forEach(s=>{Q[s.key].slice().sort((a,b)=>a.lv-b.lv).forEach(q=>S.list.push({...q,subj:s}))});
+function start(mode){
+  S.mode=mode;S.list=[];
+  const subs=mode==="all"?SUBJ:SUBJ.filter(s=>s.key===mode);
+  subs.forEach(s=>{
+    const qs=shuffle(Q[s.key]).sort((a,b)=>a.lv-b.lv);
+    qs.forEach(q=>S.list.push({...q,subj:s}));
+  });
   S.idx=0;S.score=0;S.log=[];S.combo=0;
   stage();
 }
 function stage(){
   const q=S.list[S.idx];
+  const st=S.mode==="all"?`<div class="muted">ステージ ${SUBJ.indexOf(q.subj)+1} / 5</div>`:"";
   $("app").innerHTML=`<div class="card stage">
-    <div class="big">${q.subj.emoji}</div>
-    <div class="muted">ステージ ${SUBJ.indexOf(q.subj)+1} / 5</div>
-    <h2 style="color:${q.subj.color}">${q.subj.name}</h2>
-    <div class="muted">いまの得点：${S.score}点</div>
+    <div class="big">${q.subj.emoji}</div>${st}
+    <h2 style="color:${q.subj.color}">${q.subj.name} 20問</h2>
+    <div class="muted">いまの得点：${fmt(S.score)}点</div>
     <button class="btn" style="background:${q.subj.color}" onclick="show()">はじめる</button></div>`;
+}
+function quit(){
+  const box=$("quitbox");if(box){box.style.display=box.style.display==="block"?"none":"block"}
 }
 function show(){
   const q=S.list[S.idx];S.hintUsed=false;S.answered=false;S.orderPick=[];
-  const n=(S.idx%5)+1;
+  const n=(S.idx%20)+1;
   let body="";
   if(q.type==="o"){
     q._pool=shuffle(q.t.map((w,i)=>({w,i})));
-    body=`<div class="slots" id="slots"><span class="muted" style="padding:8px">↓ 下の単語をタップして並べてね</span></div>
+    body=`<div class="slots" id="slots"></div>
       <div class="pool" id="pool">${q._pool.map((p,k)=>`<button class="tile" id="t${k}" onclick="tapTile(${k})">${esc(p.w)}</button>`).join("")}</div>
       <div style="display:flex;gap:8px"><button class="btn ghost" onclick="resetOrder()">やり直す</button>
-      <button class="btn" id="okbtn" style="background:${q.subj.color}" onclick="checkOrder()">決定</button></div>`;
+      <button class="btn" style="background:${q.subj.color}" onclick="checkOrder()">決定</button></div>`;
   }else{
     q._ord=shuffle(q.o.map((t,i)=>i));
     body=`<div class="opts">${q._ord.map((oi,k)=>`<button class="opt" id="o${k}" onclick="answer(${k})"><b>${"ABCD"[k]}</b><span>${esc(q.o[oi])}</span></button>`).join("")}</div>`;
   }
   $("app").innerHTML=`
-  <div class="top"><span>${esc(S.names[S.player])}</span><span class="score">${S.score}点</span></div>
-  <div class="bar"><i style="width:${S.idx/25*100}%"></i></div>
+  <div class="top"><span>${esc(S.names[S.player])}・${modeName(S.mode)}　<button class="quit" onclick="quit()">中断</button></span><span class="score">${fmt(S.score)}点</span></div>
+  <div class="card" id="quitbox" style="display:none;text-align:center">ここでやめる？（記録は残りません）
+    <div style="display:flex;gap:8px"><button class="btn ghost" onclick="quit()">続ける</button><button class="btn" onclick="home()">やめる</button></div></div>
+  <div class="bar"><i style="width:${S.idx/S.list.length*100}%"></i></div>
   <div class="card">
     <span class="tag" style="background:${q.subj.color}">${q.subj.name}</span><span class="stars">${stars(q.lv)}</span>
-    <span class="qno">${n} / 5</span>
+    <span class="qno">${n} / 20</span>
     <div class="q">${esc(q.q).replace(/\(  \)/g,'<span class="blank">？</span>')}</div>
     ${body}
-    <button class="hintbtn" id="hb" onclick="hint()">💡 ヒントを見る（正解で2点になるよ）</button>
+    <button class="hintbtn" id="hb" onclick="hint()">💡 ヒントを見る（正解で0.5点になるよ）</button>
     <div class="hint" id="hint">💡 ${esc(q.h)}</div>
     <div class="fb" id="fb"></div>
   </div>`;
+  if(q.type==="o")renderSlots(q);
   window.scrollTo(0,0);
 }
 function hint(){if(S.answered)return;S.hintUsed=true;$("hint").style.display="block";$("hb").style.display="none"}
-
-function tapTile(k){
-  if(S.answered)return;const q=S.list[S.idx];
-  S.orderPick.push(k);$("t"+k).classList.add("used");renderSlots(q);
-}
+function tapTile(k){if(S.answered)return;S.orderPick.push(k);$("t"+k).classList.add("used");renderSlots(S.list[S.idx])}
 function renderSlots(q){
   $("slots").innerHTML=S.orderPick.length?S.orderPick.map((k,pos)=>`<button class="tile" onclick="untap(${pos})">${esc(q._pool[k].w)}</button>`).join(""):
    `<span class="muted" style="padding:8px">↓ 下の単語をタップして並べてね</span>`;
@@ -257,66 +318,62 @@ function resetOrder(){if(S.answered)return;S.orderPick.forEach(k=>$("t"+k).class
 function checkOrder(){
   const q=S.list[S.idx];if(S.answered)return;
   if(S.orderPick.length<q.t.length){$("slots").style.borderColor="var(--ng)";setTimeout(()=>{const e=$("slots");if(e)e.style.borderColor=""},500);return}
-  const ok=S.orderPick.map(k=>q._pool[k].w).join(" ")===q.t.join(" ");
-  finish(ok,q.t.join(" "));
+  finish(S.orderPick.map(k=>q._pool[k].w).join(" ")===q.t.join(" "),q.t.join(" "));
 }
 function answer(k){
-  if(S.answered)return;const q=S.list[S.idx];
-  const ok=q._ord[k]===q.a;
+  if(S.answered)return;const q=S.list[S.idx];const ok=q._ord[k]===q.a;
   q._ord.forEach((oi,j)=>{const b=$("o"+j);b.disabled=true;if(oi===q.a)b.classList.add("ok");else if(j===k)b.classList.add("ng");else b.classList.add("dim")});
   finish(ok,q.o[q.a]);
 }
 function finish(ok,ans){
   const q=S.list[S.idx];S.answered=true;
-  const pt=ok?(S.hintUsed?2:4):0;S.score+=pt;
-  S.combo=ok?S.combo+1:0;
+  const pt=ok?(S.hintUsed?0.5:1):0;S.score+=pt;S.combo=ok?S.combo+1:0;
   S.log.push({q,ok,pt,ans});
-  if(S.combo>=3)pop(S.combo+" コンボ！🔥");else if(ok&&q.lv===3)pop("むずかしい問題クリア！✨");
+  if(S.combo>=3&&S.combo%5===0)pop(S.combo+" コンボ！🔥🔥");else if(S.combo>=3)pop(S.combo+" コンボ！🔥");else if(ok&&q.lv===3)pop("むずかしい問題クリア！✨");
   $("hb").style.display="none";
-  const last=S.idx===24;
+  const last=S.idx===S.list.length-1;
   const f=$("fb");f.className="fb "+(ok?"ok":"ng");f.style.display="block";
-  f.innerHTML=`<h3>${ok?"⭕ 正解！ +"+pt+"点":"❌ ざんねん…"}</h3>
+  f.innerHTML=`<h3>${ok?"⭕ 正解！ +"+fmt(pt)+"点":"❌ ざんねん…"}</h3>
    ${ok?"":`<div>答え：<b>${esc(ans)}</b></div>`}
    <div>${esc(q.e)}</div>
    <button class="btn" style="background:${q.subj.color}" onclick="next()">${last?"結果を見る 🎉":"次へ ▶"}</button>`;
-  document.querySelector(".top .score").textContent=S.score+"点";
+  document.querySelector(".top .score").textContent=fmt(S.score)+"点";
   setTimeout(()=>f.scrollIntoView({behavior:"smooth",block:"nearest"}),50);
 }
 function pop(t){const c=$("combo");c.textContent=t;c.classList.add("show");setTimeout(()=>c.classList.remove("show"),1100)}
-function next(){S.idx++;if(S.idx>=25)return result();if(S.idx%5===0)stage();else show()}
+function next(){S.idx++;if(S.idx>=S.list.length)return result();if(S.idx%20===0)stage();else show()}
 
 function result(){
-  const sc=S.score;
-  const rank=sc===100?"👑 パーフェクト！5教科マスター":sc>=85?"🥇 学年トップクラス！":sc>=70?"🥈 かなりデキる！":sc>=50?"🥉 いい調子！あと一歩":"🌱 のびしろたっぷり！";
-  const prev=store("q1_best_"+S.player);const isBest=prev==null||sc>prev;if(isBest)store("q1_best_"+S.player,sc);
-  const per=SUBJ.map(s=>({s,v:S.log.filter(l=>l.q.subj===s).reduce((a,l)=>a+l.pt,0)}));
+  const sc=S.score,full=S.list.length,pct=sc/full*100;
+  const rank=pct===100?"👑 パーフェクト！テスト満点まちがいなし":pct>=85?"🥇 学年トップクラス！":pct>=70?"🥈 かなりデキる！":pct>=50?"🥉 いい調子！あと一歩":"🌱 のびしろたっぷり！もう一回！";
+  const bk=bestKey(S.player,S.mode),prev=store(bk);const isBest=prev==null||sc>prev;if(isBest)store(bk,sc);
+  const subs=S.mode==="all"?SUBJ:SUBJ.filter(s=>s.key===S.mode);
+  const per=subs.map(s=>({s,v:S.log.filter(l=>l.q.subj===s).reduce((a,l)=>a+l.pt,0)}));
   const wrong=S.log.filter(l=>!l.ok);
   $("app").innerHTML=`
   <div class="card total">
-    <div class="muted">${esc(S.names[S.player])} の結果</div>
-    <div class="pt">${sc}<small>点</small></div>
+    <div class="muted">${esc(S.names[S.player])}・${modeName(S.mode)} の結果</div>
+    <div class="pt">${fmt(sc)}<small>点 / ${full}</small></div>
     <div class="rank">${rank}</div>
-    ${isBest&&prev!=null?`<div style="margin-top:8px;font-weight:800;color:var(--ei)">🎊 ベスト更新！（前回 ${prev}点）</div>`:""}
+    ${isBest&&prev!=null?`<div style="margin-top:8px;font-weight:800;color:var(--ei)">🎊 ベスト更新！（前回 ${fmt(prev)}点）</div>`:""}
   </div>
   <div class="card">
     <div style="font-weight:800;margin-bottom:4px">教科別（各20点）</div>
     ${per.map(p=>`<div class="row"><span class="nm" style="color:${p.s.color}">${p.s.name}</span>
-      <span class="bg"><i style="width:${p.v/20*100}%;background:${p.s.color}"></i></span><span class="v">${p.v}/20</span></div>`).join("")}
+      <span class="bg"><i style="width:${p.v/20*100}%;background:${p.s.color}"></i></span><span class="v">${fmt(p.v)}/20</span></div>`).join("")}
   </div>
-  <div class="card">
+  <a class="btn" id="linebtn" style="background:#06c755;text-align:center;text-decoration:none" target="_blank" rel="noopener">📩 結果をLINEで送る</a>
+  <div class="card" style="margin-top:12px">
     <div style="font-weight:800;margin-bottom:4px">${wrong.length?"🔁 まちがえた問題をふり返ろう（"+wrong.length+"問）":"🎯 全問正解！すごい！"}</div>
     ${wrong.map(l=>`<div class="rev"><span class="tag" style="background:${l.q.subj.color};font-size:11px">${l.q.subj.name}</span>
       <div style="white-space:pre-line;margin-top:4px">${esc(l.q.q)}</div>
       <div>答え：<b>${esc(l.ans)}</b></div><div class="muted" style="font-size:13px">${esc(l.q.e)}</div></div>`).join("")}
   </div>
-  <a class="btn" id="linebtn" style="background:#06c755;text-align:center;text-decoration:none" target="_blank" rel="noopener">📩 結果をLINEで送る</a>
-  <button class="btn" onclick="start()">もう一回チャレンジ</button>
-  <button class="btn ghost" onclick="home()">${esc(S.names[1-S.player])} に交代する</button>`;
-  const txt=`【中1テスト対策クイズ】\n${S.names[S.player]}：${sc}点／100点\n${rank}\n`+per.map(p=>`${p.s.name} ${p.v}/20`).join("・")+
-    (wrong.length?`\n\n▼まちがえた問題\n`+wrong.map(l=>`・${l.q.subj.name}：${l.q.q.split("\n")[0]}（答え：${l.ans}）`).join("\n"):"\n\n全問正解！🎯");
+  <button class="btn" onclick="start('${S.mode}')">もう一回チャレンジ</button>
+  <button class="btn ghost" onclick="home()">トップにもどる（交代はここから）</button>`;
+  const txt=`【中1テスト対策・${modeName(S.mode)}】\n${S.names[S.player]}：${fmt(sc)}点／${full}点\n${rank}\n`+per.map(p=>`${p.s.name} ${fmt(p.v)}/20`).join("・")+
+    (wrong.length?`\n\n▼まちがえた問題（${wrong.length}問）\n`+wrong.slice(0,30).map(l=>`・${l.q.subj.name}：${l.q.q.split("\n")[0]}（答え：${l.ans}）`).join("\n")+(wrong.length>30?"\n…ほか"+(wrong.length-30)+"問":""):"\n\n全問正解！🎯");
   $("linebtn").href="https://line.me/R/share?text="+encodeURIComponent(txt);
-  if(!document.querySelector(".btn.ghost"))return;
-  document.querySelector(".btn.ghost").onclick=()=>{S.player=1-S.player;home()};
   window.scrollTo(0,0);
 }
 home();
