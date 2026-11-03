@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-<title>中1 2学期テスト対策 ガチンコ100問</title>
+<title>中1 2学期テスト対策 ガチンコ100問 パターンA</title>
 <style>
 :root{
   --bg:#fff8ef; --ink:#2b2b3a; --sub:#6b6b7b; --card:#ffffff; --line:#eadfce;
@@ -84,6 +84,10 @@ h1{font-size:22px;margin:6px 0 4px;text-align:center}
 .modes{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-top:10px}
 .mode{border:none;border-radius:14px;padding:12px 6px;color:#fff;font-weight:800;font-size:15px;font-family:inherit;cursor:pointer}
 .mode small{display:block;font-weight:600;font-size:11px;opacity:.9}
+.lv{display:flex;align-items:center;gap:10px;margin-top:10px;font-size:13px}
+.lv .b{flex:1;height:10px;background:#efe6d8;border-radius:10px;overflow:hidden}.lv .b i{display:block;height:100%;background:linear-gradient(90deg,#f5b400,#f29a1f)}
+.cf{position:fixed;top:-20px;width:10px;height:14px;border-radius:2px;pointer-events:none;z-index:9;animation:fall linear forwards}
+@keyframes fall{to{transform:translateY(110vh) rotate(720deg)}}
 .quit{background:none;border:none;color:var(--sub);font-family:inherit;font-size:12px;text-decoration:underline;cursor:pointer;padding:0}
 </style>
 </head>
@@ -220,13 +224,27 @@ const esc=s=>String(s).replace(/[&<>"]/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",
 const shuffle=a=>{a=a.slice();for(let i=a.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[a[i],a[j]]=[a[j],a[i]]}return a};
 const stars=n=>"★".repeat(n)+"☆".repeat(3-n);
 const fmt=v=>Number.isInteger(v)?String(v):v.toFixed(1);
-const modeName=m=>m==="all"?"5教科100問":SUBJ.find(s=>s.key===m).name+"20問";
-const bestKey=(p,m)=>"q2_best_"+p+"_"+m;
+const modeName=m=>m==="all"?"5教科100問":m==="retry"?"まちがえた問題の解き直し":SUBJ.find(s=>s.key===m).name+"20問";
+const P="q2";const PL="パターンA";const OTHER=["パターンB","b/"];
+const bestKey=(p,m)=>P+"_best_"+p+"_"+m;
+const saveKey=p=>P+"_save_"+p;
+function save(idx){const d={mode:S.mode,list:S.list.map(q=>[q.subj.key,q._i]),idx,score:S.score,combo:S.combo,log:S.log.map(l=>[S.list.indexOf(l.q),l.ok,l.pt])};store(saveKey(S.player),d)}
+const xpKey=p=>"q_xp_"+p;
+const TITLES=[[1,"🐣 見習い"],[3,"🌱 がんばり屋"],[5,"⚔️ クイズ戦士"],[8,"📚 勉強の達人"],[12,"🔥 テスト番長"],[16,"🦉 学年の賢者"],[20,"👑 5教科マスター"]];
+const lvOf=x=>Math.floor(x/100)+1;const titleOf=l=>TITLES.filter(t=>l>=t[0]).pop()[1];
+function addXp(n){const k=xpKey(S.player);const b=store(k)||0,a=b+n;store(k,a);if(lvOf(a)>lvOf(b))setTimeout(()=>{pop("🎉 レベルアップ！ Lv."+lvOf(a));confetti(40)},700)}
+function confetti(n){const c=["#e0527a","#3b7ddd","#f29a1f","#2fa36b","#8a5cd6","#f5b400"];for(let i=0;i<n;i++){const d=document.createElement("div");d.className="cf";d.style.left=Math.random()*100+"vw";d.style.background=c[i%6];d.style.animationDuration=(1.5+Math.random()*1.5)+"s";d.style.animationDelay=Math.random()*.4+"s";document.body.appendChild(d);setTimeout(()=>d.remove(),3500)}}
+const OKMSG=["⭕ 正解！","⭕ ナイス！","⭕ さすが！","⭕ 天才か!?","⭕ その調子！","⭕ お見事！","⭕ パーフェクト！","⭕ いいね！"];
+const NGMSG=["❌ おしい！","❌ ドンマイ！","❌ ここで覚えればOK！","❌ 次は取れる！","❌ ひっかけだったね…","❌ くやしい！"];
+const rnd=a=>a[Math.floor(Math.random()*a.length)];
+function clearSave(){try{localStorage.removeItem(saveKey(S.player))}catch(e){}}
+function ansOf(q){return q.type==="o"?q.t.join(" "):q.o[q.a]}
+function resume(){const d=store(saveKey(S.player));if(!d)return home();S.mode=d.mode;S.list=d.list.map(([k,i])=>({...Q[k][i],subj:SUBJ.find(s=>s.key===k),_i:i}));S.score=d.score;S.combo=d.combo||0;S.log=d.log.map(([li,ok,pt])=>({q:S.list[li],ok,pt,ans:ansOf(S.list[li])}));S.idx=d.idx;if(S.idx>=S.list.length)return result();if(S.mode!=="retry"&&S.idx%20===0)stage();else show()}
 
 function home(){
   const b=bestKey(S.player,"all"),bv=store(b);
   $("app").innerHTML=`
-  <h1>🔥 中1 2学期テスト対策<br>ガチンコ100問</h1>
+  <h1>🔥 中1 2学期テスト対策<br>ガチンコ100問 ${PL}</h1>
   <p class="lead">11月2日までの授業範囲・5教科×20問<br>（横浜市の教科書に対応）</p>
   <div class="card">
     <div style="font-weight:800;margin-bottom:8px">だれがやる？（名前はタップで変えられるよ）</div>
@@ -236,7 +254,9 @@ function home(){
         <input value="${esc(S.names[i])}" maxlength="8" onclick="event.stopPropagation();pick(${i},true)" oninput="rename(${i},this.value)">
         <div class="best">${v==null?"100問：記録なし":"100問ベスト "+fmt(v)+"点"}</div></div>`}).join("")}
     </div>
+    ${(()=>{const x=store(xpKey(S.player))||0,l=lvOf(x);return `<div class="lv"><b>Lv.${l}</b><span>${titleOf(l)}</span><span class="b"><i style="width:${x%100}%"></i></span><span class="muted">次まで${100-x%100}</span></div>`})()}
   </div>
+  ${(()=>{const d=store(saveKey(S.player));return d&&d.idx<d.list.length?`<div class="card" style="border:2px solid var(--ei)"><div style="font-weight:800">📌 ${esc(S.names[S.player])} の続きがあります</div><div class="muted" style="margin-top:4px">${modeName(d.mode)}・${d.idx+1}問目から（いま ${fmt(d.score)}点）</div><button class="btn" style="background:var(--ei)" onclick="resume()">▶ 続きから再開</button><div class="muted" style="margin-top:6px">※下のボタンで新しく始めると、この続きは消えます</div></div>`:""})()}
   <div class="card">
     <button class="btn" style="background:linear-gradient(90deg,var(--koku),var(--ri));margin-top:0" onclick="start('all')">🏆 5教科100問に挑戦（100点満点）</button>
     <div style="font-weight:800;margin:14px 0 0;font-size:14px">教科ごとに練習（各20問・20点満点）</div>
@@ -247,11 +267,13 @@ function home(){
       <li>1問1点。100問で100点満点</li>
       <li>難しさは ★☆☆〜★★★</li>
       <li>💡ヒントを見て正解すると 0.5点</li>
-      <li>連続正解でコンボ！</li>
+      <li>連続正解でコンボ！ 正解でEXPがたまってレベルアップ</li>
+      <li>📌 1問ごとに自動で途中保存。閉じても続きから再開できる</li>
     </ul>
-  </div>`;
+  </div>
+  <a class="btn ghost" href="${OTHER[1]}" style="text-align:center;text-decoration:none">🔀 ${OTHER[0]}（別の100問）へ</a>`;
 }
-function pick(i,keep){S.player=i;if(!keep)home();else document.querySelectorAll(".pl").forEach((e,j)=>e.classList.toggle("sel",j===i))}
+function pick(i,keep){const ch=S.player!==i;S.player=i;if(!keep||ch){home();if(keep){const inp=document.querySelectorAll(".pl input")[i];inp&&inp.focus()}}}
 function rename(i,v){S.names[i]=v.trim()||(i===0?"ふうちゃん":"プレイヤー2");store("q2_names",S.names)}
 
 function start(mode){
@@ -259,15 +281,17 @@ function start(mode){
   const subs=mode==="all"?SUBJ:SUBJ.filter(s=>s.key===mode);
   subs.forEach(s=>{
     const qs=shuffle(Q[s.key]).sort((a,b)=>a.lv-b.lv);
-    qs.forEach(q=>S.list.push({...q,subj:s}));
+    qs.forEach(q=>S.list.push({...q,subj:s,_i:Q[s.key].indexOf(q)}));
   });
-  S.idx=0;S.score=0;S.log=[];S.combo=0;
+  S.idx=0;S.score=0;S.log=[];S.combo=0;save(0);
   stage();
 }
 function stage(){
   const q=S.list[S.idx];
   const st=S.mode==="all"?`<div class="muted">ステージ ${SUBJ.indexOf(q.subj)+1} / 5</div>`:"";
-  $("app").innerHTML=`<div class="card stage">
+  let clr="";if(S.idx>0){const pv=S.list[S.idx-1].subj,v=S.log.filter(l=>l.q.subj===pv).reduce((a,l)=>a+l.pt,0);
+   clr=`<div style="margin-bottom:14px;padding:12px;border-radius:14px;background:#fff3e0"><div style="font-size:22px;font-weight:900;color:${pv.color}">${pv.name} クリア！</div><div style="font-size:28px;font-weight:900">${fmt(v)} / 20点</div><div>${v>=18?"🌟 すごすぎる！":v>=14?"✨ いい感じ！":v>=10?"👍 まずまず！":"💪 次の教科で取り返そう！"}</div></div>`;setTimeout(()=>confetti(v>=14?50:20),100)}
+  $("app").innerHTML=`<div class="card stage">${clr}
     <div class="big">${q.subj.emoji}</div>${st}
     <h2 style="color:${q.subj.color}">${q.subj.name} 20問</h2>
     <div class="muted">いまの得点：${fmt(S.score)}点</div>
@@ -292,12 +316,12 @@ function show(){
   }
   $("app").innerHTML=`
   <div class="top"><span>${esc(S.names[S.player])}・${modeName(S.mode)}　<button class="quit" onclick="quit()">中断</button></span><span class="score">${fmt(S.score)}点</span></div>
-  <div class="card" id="quitbox" style="display:none;text-align:center">ここでやめる？（記録は残りません）
-    <div style="display:flex;gap:8px"><button class="btn ghost" onclick="quit()">続ける</button><button class="btn" onclick="home()">やめる</button></div></div>
+  <div class="card" id="quitbox" style="display:none;text-align:center">ここで中断する？（ここまでの答えは保存され、トップの「続きから再開」で続けられます）
+    <div style="display:flex;gap:8px"><button class="btn ghost" onclick="quit()">続ける</button><button class="btn" onclick="home()">中断する</button></div></div>
   <div class="bar"><i style="width:${S.idx/S.list.length*100}%"></i></div>
   <div class="card">
     <span class="tag" style="background:${q.subj.color}">${q.subj.name}</span><span class="stars">${stars(q.lv)}</span>
-    <span class="qno">${n} / 20</span>
+    <span class="qno">${S.mode==="retry"?(S.idx+1)+" / "+S.list.length:n+" / 20"}</span>
     <div class="q">${esc(q.q).replace(/\(  \)/g,'<span class="blank">？</span>')}</div>
     ${body}
     <button class="hintbtn" id="hb" onclick="hint()">💡 ヒントを見る（正解で0.5点になるよ）</button>
@@ -328,12 +352,12 @@ function answer(k){
 function finish(ok,ans){
   const q=S.list[S.idx];S.answered=true;
   const pt=ok?(S.hintUsed?0.5:1):0;S.score+=pt;S.combo=ok?S.combo+1:0;
-  S.log.push({q,ok,pt,ans});
+  S.log.push({q,ok,pt,ans});save(S.idx+1);if(ok)addXp((S.hintUsed?5:10)+(q.lv===3?5:0)+(S.combo>=5?5:0));
   if(S.combo>=3&&S.combo%5===0)pop(S.combo+" コンボ！🔥🔥");else if(S.combo>=3)pop(S.combo+" コンボ！🔥");else if(ok&&q.lv===3)pop("むずかしい問題クリア！✨");
   $("hb").style.display="none";
   const last=S.idx===S.list.length-1;
   const f=$("fb");f.className="fb "+(ok?"ok":"ng");f.style.display="block";
-  f.innerHTML=`<h3>${ok?"⭕ 正解！ +"+fmt(pt)+"点":"❌ ざんねん…"}</h3>
+  f.innerHTML=`<h3>${ok?rnd(OKMSG)+" +"+fmt(pt)+"点":rnd(NGMSG)}</h3>
    ${ok?"":`<div>答え：<b>${esc(ans)}</b></div>`}
    <div>${esc(q.e)}</div>
    <button class="btn" style="background:${q.subj.color}" onclick="next()">${last?"結果を見る 🎉":"次へ ▶"}</button>`;
@@ -341,26 +365,27 @@ function finish(ok,ans){
   setTimeout(()=>f.scrollIntoView({behavior:"smooth",block:"nearest"}),50);
 }
 function pop(t){const c=$("combo");c.textContent=t;c.classList.add("show");setTimeout(()=>c.classList.remove("show"),1100)}
-function next(){S.idx++;if(S.idx>=S.list.length)return result();if(S.idx%20===0)stage();else show()}
+function next(){S.idx++;if(S.idx>=S.list.length)return result();if(S.mode!=="retry"&&S.idx%20===0)stage();else show()}
 
 function result(){
   const sc=S.score,full=S.list.length,pct=sc/full*100;
   const rank=pct===100?"👑 パーフェクト！テスト満点まちがいなし":pct>=85?"🥇 学年トップクラス！":pct>=70?"🥈 かなりデキる！":pct>=50?"🥉 いい調子！あと一歩":"🌱 のびしろたっぷり！もう一回！";
-  const bk=bestKey(S.player,S.mode),prev=store(bk);const isBest=prev==null||sc>prev;if(isBest)store(bk,sc);
-  const subs=S.mode==="all"?SUBJ:SUBJ.filter(s=>s.key===S.mode);
+  clearSave();
+  const bk=bestKey(S.player,S.mode),prev=S.mode==="retry"?null:store(bk);const isBest=S.mode!=="retry"&&(prev==null||sc>prev);if(isBest)store(bk,sc);
+  const subs=SUBJ.filter(s=>S.list.some(q=>q.subj===s));
   const per=subs.map(s=>({s,v:S.log.filter(l=>l.q.subj===s).reduce((a,l)=>a+l.pt,0)}));
   const wrong=S.log.filter(l=>!l.ok);
   $("app").innerHTML=`
   <div class="card total">
-    <div class="muted">${esc(S.names[S.player])}・${modeName(S.mode)} の結果</div>
+    <div class="muted">${esc(S.names[S.player])}・${PL}・${modeName(S.mode)} の結果</div>
     <div class="pt">${fmt(sc)}<small>点 / ${full}</small></div>
     <div class="rank">${rank}</div>
     ${isBest&&prev!=null?`<div style="margin-top:8px;font-weight:800;color:var(--ei)">🎊 ベスト更新！（前回 ${fmt(prev)}点）</div>`:""}
   </div>
   <div class="card">
-    <div style="font-weight:800;margin-bottom:4px">教科別（各20点）</div>
+    <div style="font-weight:800;margin-bottom:4px">教科別</div>
     ${per.map(p=>`<div class="row"><span class="nm" style="color:${p.s.color}">${p.s.name}</span>
-      <span class="bg"><i style="width:${p.v/20*100}%;background:${p.s.color}"></i></span><span class="v">${fmt(p.v)}/20</span></div>`).join("")}
+      <span class="bg"><i style="width:${p.v/20*100}%;background:${p.s.color}"></i></span><span class="v">${fmt(p.v)}/${S.list.filter(q=>q.subj===p.s).length}</span></div>`).join("")}
   </div>
   <a class="btn" id="linebtn" style="background:#06c755;text-align:center;text-decoration:none" target="_blank" rel="noopener">📩 結果をLINEで送る</a>
   <div class="card" style="margin-top:12px">
@@ -369,13 +394,17 @@ function result(){
       <div style="white-space:pre-line;margin-top:4px">${esc(l.q.q)}</div>
       <div>答え：<b>${esc(l.ans)}</b></div><div class="muted" style="font-size:13px">${esc(l.q.e)}</div></div>`).join("")}
   </div>
-  <button class="btn" onclick="start('${S.mode}')">もう一回チャレンジ</button>
+  ${wrong.length?`<button class="btn" style="background:var(--ng)" onclick="retryWrong()">🔁 まちがえた${wrong.length}問だけ解き直す</button>`:""}
+  ${S.mode==="retry"?"":`<button class="btn" onclick="start('${S.mode}')">もう一回チャレンジ</button>`}
   <button class="btn ghost" onclick="home()">トップにもどる（交代はここから）</button>`;
-  const txt=`【中1テスト対策・${modeName(S.mode)}】\n${S.names[S.player]}：${fmt(sc)}点／${full}点\n${rank}\n`+per.map(p=>`${p.s.name} ${fmt(p.v)}/20`).join("・")+
+  const txt=`【中1テスト対策${PL}・${modeName(S.mode)}】\n${S.names[S.player]}：${fmt(sc)}点／${full}点\n${rank}\n`+per.map(p=>`${p.s.name} ${fmt(p.v)}/${S.list.filter(q=>q.subj===p.s).length}`).join("・")+
     (wrong.length?`\n\n▼まちがえた問題（${wrong.length}問）\n`+wrong.slice(0,30).map(l=>`・${l.q.subj.name}：${l.q.q.split("\n")[0]}（答え：${l.ans}）`).join("\n")+(wrong.length>30?"\n…ほか"+(wrong.length-30)+"問":""):"\n\n全問正解！🎯");
+  if(pct>=70)setTimeout(()=>confetti(pct===100?120:60),200);
+  S._wrong=wrong.map(l=>l.q);
   $("linebtn").href="https://line.me/R/share?text="+encodeURIComponent(txt);
   window.scrollTo(0,0);
 }
+function retryWrong(){S.mode="retry";S.list=shuffle(S._wrong).map(q=>({...q}));S.idx=0;S.score=0;S.log=[];S.combo=0;save(0);show()}
 home();
 </script>
 </body>
